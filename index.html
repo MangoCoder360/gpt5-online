@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://github.com/js-cookie/js-cookie/releases/download/v3.0.1/js.cookie.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gpt 5 online</title>
+</head>
+<body>
+    <h1>welcome to gpt 5. this is real.</h1>
+    <div id="messages">
+
+    </div>
+    <div id="textEntry">
+        <textarea placeholder="enter prompt for gpt 5"></textarea>
+        <button onclick="askGPT()"><strong>ask da chat gpt</strong></button>
+        <h5 style="display:none;" id="plzwait">please wait 5 seconds before asking chat gpt something else</h5>
+    </div>
+</body>
+<footer>
+    <div style="padding:1px">
+        <h4>Made by Reuben Schiopu</h4>
+        <h5 onclick="resetkey()"><a href="#">Reset API Key</a></h5>
+    </div>
+</footer>
+</html>
+
+<script>
+    var allowgpt = true;
+
+    function getAPIKey() {
+        var keyFromCookie = Cookies.get("apikey");
+        if (keyFromCookie != null && keyFromCookie != undefined && keyFromCookie != ""){
+            alert("API Key: " + keyFromCookie);
+        }
+        else{
+            var key = prompt("giv openai api key");
+        if (key == null || key == "") {
+            getAPIKey();
+        }
+        else{
+            Cookies.set("apikey",key,{expires:7});
+            getAPIKey();
+        }   
+        }
+    }
+    setTimeout(getAPIKey, 500);
+
+    function resetkey() {
+        Cookies.remove("apikey");
+        getAPIKey();
+    }
+
+    function askGPT(){
+        if(allowgpt == true){
+            document.getElementById("plzwait").style.display = "block";
+        allowgpt = false;
+        setTimeout(() => {
+            document.getElementById("plzwait").style.display = "none";
+            allowgpt = true;
+        }, 5000);
+        }
+        else{
+            alert("wait 5 seconds idiot");
+        }
+    }
+</script>
+
+<style>
+    footer{
+  background-color:#202123;
+  text-align: center;
+  padding: 0px !important;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color:white;
+  font-family: sans-serif;
+}
+html{
+    text-align: center;
+    color:white;
+    background-color: #343541;
+    font-family: sans-serif;
+}
+#textEntry{
+    display: flex;
+    flex-direction: column;
+    position:fixed;
+    bottom:15%;
+    width: 70%;
+    left:15%;
+    resize:none;
+    font-family: sans-serif;
+    text-align: center;
+    align-items: center;
+}
+textarea{
+    width:100%;
+    font-family: sans-serif;
+    text-align: center;
+    height: 70px;
+}
+button{
+    border:none;
+    margin:5px;
+    padding:5px;
+    width: 20%;
+    background-color: rgb(255, 77, 77);
+    border-radius: 5px;
+    box-shadow: 4px 4px 2px rgb(255, 100, 100);
+}
+button:hover{
+  background-color: rgb(255, 90, 90);
+  box-shadow: 4px 4px 2px rgb(255, 100, 100);
+}
+button:active{
+background-color: rgb(255, 154, 77);
+box-shadow: 4px 4px 1px rgb(255, 166, 99);
+}
+</style>
