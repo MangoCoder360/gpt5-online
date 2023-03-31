@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://github.com/js-cookie/js-cookie/releases/download/v3.0.1/js.cookie.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,14 +12,14 @@
     <title>gpt 5 online</title>
 </head>
 <body>
-    <h1>welcome to gpt 5. this is real.</h1>
+    <h1 style="font-size:50px;font-family: Comfortaa;">welcome to gpt 5. this is real.</h1>
     <div id="messages">
-
+        <br><br><h2 style="font-family:Roboto" id="response"></h2>
     </div>
     <div id="textEntry">
-        <textarea placeholder="enter prompt for gpt 5"></textarea>
+        <textarea id="textarea" placeholder="enter prompt for gpt 5"></textarea>
         <button onclick="askGPT()"><strong>ask da chat gpt</strong></button>
-        <h5 style="display:none;" id="plzwait">please wait 5 seconds before asking chat gpt something else</h5>
+        <h5 style="display:none;" id="plzwait">please wait 10 seconds before asking chat gpt something else</h5>
     </div>
 </body>
 <footer>
@@ -33,9 +34,9 @@
     var allowgpt = true;
 
     function getAPIKey() {
-        var keyFromCookie = Cookies.get("apikey");
-        if (keyFromCookie != null && keyFromCookie != undefined && keyFromCookie != ""){
-            alert("API Key: " + keyFromCookie);
+        window.keyFromCookie = Cookies.get("apikey");
+        if (window.keyFromCookie != null && window.keyFromCookie != undefined && window.keyFromCookie != ""){
+            alert("API Key: " + window.keyFromCookie);
         }
         else{
             var key = prompt("giv openai api key");
@@ -57,17 +58,47 @@
 
     function askGPT(){
         if(allowgpt == true){
+            pingAPI();
             document.getElementById("plzwait").style.display = "block";
         allowgpt = false;
         setTimeout(() => {
             document.getElementById("plzwait").style.display = "none";
             allowgpt = true;
-        }, 5000);
+        }, 12000);
         }
         else{
-            alert("wait 5 seconds idiot");
+            alert("wait 10 seconds idiot");
         }
     }
+
+function pingAPI(){
+    document.getElementById("response").innerHTML = "Response loading...";
+    $.ajax({
+        method: "POST",
+        url: "https://api.openai.com/v1/chat/completions",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+window.keyFromCookie
+
+        },
+        "data": JSON.stringify({
+            "model": "gpt-3.5-turbo",
+            "messages": [
+                {
+                "role": "user",
+                "content": document.getElementById("textarea").value
+                }
+            ]
+        }),
+        success: function(response){
+            console.log(response);
+            document.getElementById("response").innerHTML = response["choices"][0]["message"]["content"];
+        },
+        error:function (xhr,status,error){
+            document.getElementById("response").innerHTML = "Error (check api key)<br><br>" + error;
+        }
+    });
+}
 </script>
 
 <style>
